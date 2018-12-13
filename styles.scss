@@ -1,0 +1,242 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+
+@mixin mq($point) {
+  $xs: "(min-width : 0px)";
+  $sm: "(min-width : 410px)";
+  $md: "(max-width : 850px)";
+  $lg: "(min-width : 1240px)";
+  $vl: "(min-width : #{$point}px)";
+
+  @if $point==xs {
+    @media #{$xs} {
+      @content;
+    }
+  }
+
+  @else if $point==sm {
+    @media #{$sm} {
+      @content;
+    }
+  }
+
+  @else if $point==md {
+    @media #{$md} {
+      @content;
+    }
+  }
+
+  @else if $point==lg {
+    @media #{$lg} {
+      @content;
+    }
+  }
+
+  @else {
+    @media #{$vl} {
+      @content;
+    }
+  }
+}
+
+$back: #1A1A3B;
+$private: #b7ab85;
+$white: #fefefe;
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $white;
+  color: $back;
+  flex-direction: column;
+}
+
+
+.gist {
+  width: 100%;
+  margin-top: 25px;
+  margin-bottom: 50px;
+
+  &__header {
+    width: 100%;
+    margin-bottom: 25px;
+
+    &__title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 50px;
+      //margin-right: 25px;
+      //border-right: solid 3px $private;
+
+      &-main {
+        margin-right: 25px;
+        font-size: 1.2rem;
+        a {
+          color: $back;
+          text-decoration: none;
+        }
+      }
+
+      &-date {
+        font-size: 0.8rem;
+        //color: $private;
+        //margin-right: 15px;
+      }
+
+      &-state {
+        width: 5px;
+        height: 100%;
+        display: none;
+      }
+    }
+
+    &-description {
+      margin-top: 25px;
+    }
+
+
+  }
+
+  &__body {
+    margin: 25px 0px;
+
+    &-file {
+      margin-bottom: 25px;
+      border: solid 2px $back;
+      border-radius: 0.5em;
+      position: relative;
+      //height: 160px;
+      padding: 25px;
+
+      &.private {
+        border: solid 2px $private;
+
+        .filename {
+          color: $private;
+        }
+      }
+
+      //overflow: hidden;
+      .filename {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $white;
+        position: absolute;
+        top: -12.5px;
+        height: 25px;
+        left: 25px;
+        //transform: translatex(-50%);
+        padding: 0 15px;
+        font-weight: 700;
+      }
+
+      .extension {
+        height: 25px;
+        position: absolute;
+        bottom: -12.5px;
+        right: 25px;
+        padding: 0 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $white;
+        font-size: 1.1rem;
+        //font-weight: 900;
+      }
+
+      .filecontent {
+        max-height: 410px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        //padding: 25px;
+        text-align: left;
+        font-size: 11px;
+      }
+    }
+  }
+}
+
+.gistman {
+  width: 100%;
+  padding: 0 25px;
+
+  &__menu {
+    width: 100%;
+
+    &-topbar {
+      margin-top: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      flex-wrap: wrap;
+
+      a {
+        position: relative;
+        display: inline-block;
+        color: $back;
+        padding: 0 5px;
+        font-size: 1.2rem;
+        text-decoration: none;
+        text-transform: uppercase;
+
+        &.active {
+          &::after {
+            content: '\25BC'
+
+          }
+        }
+
+        &::after {
+          content: '\25B2';
+          margin-left: 5px;
+        }
+      }
+
+      input {
+        margin: 0 15px;
+      }
+
+      #search {
+        margin-left: auto;
+      }
+
+      @include mq(md) {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        input {
+          margin: 10px 0;
+        }
+
+        #search {
+          margin: 10px 0;
+        }
+
+        input[type="submit"] {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
+
+.gistlist {
+  padding: 25px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 800px;
+}
