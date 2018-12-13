@@ -1,0 +1,220 @@
+a:7:{i:0;a:8:{s:3:"url";s:61:"https://api.github.com/gists/0c941fddbe41dafbd33486a3ecfdf288";s:8:"html_url";s:56:"https://gist.github.com/0c941fddbe41dafbd33486a3ecfdf288";s:5:"files";a:1:{s:16:"sort function.js";a:6:{s:8:"filename";s:16:"sort function.js";s:4:"type";s:22:"application/javascript";s:8:"language";s:10:"JavaScript";s:7:"raw_url";s:142:"https://gist.githubusercontent.com/giventofly/0c941fddbe41dafbd33486a3ecfdf288/raw/95cf18033c573afe0946c5c81f108e6864e67eaa/sort%20function.js";s:4:"size";i:284;s:7:"content";s:284:"const sortDate = (obj,order='asc') => {
+  obj.sort((a,b) => {
+    order=='des' ? (first = a.updated_at, second = b.updated_at) : (first = b.updated_at, second = a.updated_at);
+    if (first < second) return -1;
+    if (first > second) return 1;
+    return 0;
+  });
+  loadinfo(obj);
+}
+";}}s:6:"public";b:1;s:10:"created_at";s:20:"2018-12-12T11:47:31Z";s:10:"updated_at";s:20:"2018-12-12T11:47:31Z";s:11:"description";s:35:"javascript object key sort function";s:8:"filesnum";i:1;}i:1;a:8:{s:3:"url";s:61:"https://api.github.com/gists/5de042bf607d87f51f16572a467c8343";s:8:"html_url";s:56:"https://gist.github.com/5de042bf607d87f51f16572a467c8343";s:5:"files";a:1:{s:23:"simple search object.js";a:6:{s:8:"filename";s:23:"simple search object.js";s:4:"type";s:22:"application/javascript";s:8:"language";s:10:"JavaScript";s:7:"raw_url";s:151:"https://gist.githubusercontent.com/giventofly/5de042bf607d87f51f16572a467c8343/raw/6295d21b36f68adcf2f1719a6171427a9e40375d/simple%20search%20object.js";s:4:"size";i:1553;s:7:"content";s:1553:"  const searchinput = document.getElementById('search');
+  const fsearchinput = document.getElementById('ftypesearch');
+  //searchinput.addEventListener('change', function(e){ filterme(this,); });
+  searchinput.addEventListener('keyup', function(){ this.value.length > MINSEARCH ? filterme(this.value) : loadinfo(json); });
+  fsearchinput.addEventListener('keyup', function(){ this.value.length > MINSEARCH ? filterme(this.value) : loadinfo(json); });
+  
+  const filterme = (searchv,mode='all') => {
+    document.getElementById('gistlist').innerHTML = '';
+    let filesonly = true;
+    if(mode=='files') { filesonly = false; }
+    let newjson = [];
+     json.forEach(elem => { 
+        if( (mycontains(elem.description,searchv) && filesonly) || mycontainsfiles(elem.files,searchv,mode)) {
+           newjson.push(elem);
+         }
+     });
+    currentJSON = [...newjson];
+    loadinfo(currentJSON);
+    }
+  
+  const mycontains = (str,search) => { return str.toLowerCase().includes(search.toLowerCase()); }
+  const mycontainsfiles = (elem,search,mode='all') => {
+    let found = false;
+    let filesonly = true;
+    if(mode=='files') { filesonly = false; }
+    Object.entries(elem).forEach(
+      ([key, value]) => {
+       
+        if( key.toLowerCase().includes(search.toLowerCase()) ||
+           (elem[key].filename).toLowerCase().includes(search.toLowerCase()) || 
+           ((elem[key].content).toLowerCase().includes(search.toLowerCase()) && filesonly)
+          ) { found = true; }
+      });
+    //console.log(elem,found);
+    return found;
+  };";}}s:6:"public";b:0;s:10:"created_at";s:20:"2018-12-12T11:28:03Z";s:10:"updated_at";s:20:"2018-12-12T11:28:03Z";s:11:"description";s:59:"small javascript search example in object values from input";s:8:"filesnum";i:1;}i:2;a:8:{s:3:"url";s:61:"https://api.github.com/gists/0cc1c23cdd1e87af5721837ed43785f5";s:8:"html_url";s:56:"https://gist.github.com/0cc1c23cdd1e87af5721837ed43785f5";s:5:"files";a:2:{s:21:"ajax send file wp.php";a:6:{s:8:"filename";s:21:"ajax send file wp.php";s:4:"type";s:23:"application/x-httpd-php";s:8:"language";s:3:"PHP";s:7:"raw_url";s:151:"https://gist.githubusercontent.com/giventofly/0cc1c23cdd1e87af5721837ed43785f5/raw/55f4e087da271b83d315faec52abc4b100aa0ddb/ajax%20send%20file%20wp.php";s:4:"size";i:2644;s:7:"content";s:2644:"<?php
+
+add_action('wp_ajax_my_contactform', 'my_contactform');
+add_action('wp_ajax_nopriv_my_contactform', 'my_contactform');
+function my_contactform(){
+
+  // ************************************** direct copy
+  $file=$_FILES['myfile'];
+  $upload_dir=wp_upload_dir();
+  $path=$upload_dir['basedir'].'/myuploads/';  //upload dir.
+  if(!is_dir($path)) { mkdir($path); }
+  if(upload_user_file( $file ,$path == -1)) { $result['error'][] = 'error inserting file: ' . $file['name']; };
+
+  function upload_user_file( $file = array(),$path ) {
+      if(!empty($file)) {
+          $uploaded=move_uploaded_file($file['tmp_name'], $path.$file['name']);
+          if($uploaded) { return 1; } 
+          else { return -1 ; }
+      }
+  }
+
+
+
+  // ******************* insert via wp with custom dir
+
+
+  $result = upload_user_file( $file );
+  
+
+    function upload_user_file( $file = array() ) {
+
+    //set folder to upload
+    add_filter( 'upload_dir', 'wpse_141088_upload_dir' );
+    //don't create thumbs
+    add_filter('intermediate_image_sizes_advanced', 'add_image_insert_override' );
+      
+    //require_once( ABSPATH . 'wp-admin/includes/admin.php' );
+    $file_return = wp_handle_upload( $file, array('test_form' => false ) );
+    if( isset( $file_return['error'] ) || isset( $file_return['upload_error_handler'] ) ) {
+        return false;
+    } else {
+    $filename = $file_return['file'];
+    $attachment = array(
+        'post_mime_type' => $file_return['type'],
+        'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
+        'post_content' => '',
+        'post_status' => 'inherit',
+        'guid' => $file_return['url']
+    );
+    $attachment_id = wp_insert_attachment( $attachment, $file_return['url'] );
+    // require_once(ABSPATH . 'wp-admin/includes/image.php');
+    $attachment_data = wp_generate_attachment_metadata( $attachment_id, $filename );
+    wp_update_attachment_metadata( $attachment_id, $attachment_data );
+    remove_filter( 'upload_dir', 'wpse_141088_upload_dir' );
+    remove_filter('intermediate_image_sizes_advanced', 'add_image_insert_override' );
+    if( 0 < intval( $attachment_id ) ) {
+      return $attachment_id;
+    }
+  }
+  return false;
+  
+  }
+  //set upload dir
+  function wpse_141088_upload_dir( $dir ) {
+      return array(
+          'path'   => $dir['basedir'] . '/myuploads/',
+          'url'    => $dir['baseurl'] . '/myuploads/',
+          'subdir' => '/myuploads',
+      ) + $dir;
+  }
+
+  function add_image_insert_override($sizes){
+    unset( $sizes['thumbnail']);
+    unset( $sizes['medium']);
+    unset( $sizes['large']);
+    unset($sizes['medium_large']);
+    return $sizes;
+}
+
+}";}s:10:"postfor.js";a:6:{s:8:"filename";s:10:"postfor.js";s:4:"type";s:22:"application/javascript";s:8:"language";s:10:"JavaScript";s:7:"raw_url";s:134:"https://gist.githubusercontent.com/giventofly/0cc1c23cdd1e87af5721837ed43785f5/raw/9900c05fd40d5fa7333b3a4d65939c9d491b83d2/postfor.js";s:4:"size";i:878;s:7:"content";s:878:"const sendRequest = () => {
+  console.log(state);
+  //state = JSON.stringify(state);
+  //console.log('state', state);
+  var formData = new FormData();
+  formData.set('action', "my_contactform");
+  let file = document.getElementById('fotobanco').files[0];
+  formData.append('myfile',file);
+  
+  axios.post(ajax_url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }})
+    .then(function (response) {
+      if (response.error) {
+        //console.log('response', response.error);
+        showMsg(response.error);
+        return;
+      }
+      //login com sucesso 
+      if (response.success) {
+        //only reload or redirect too?
+        showMsg("Mensagem enviada com sucesso.", 1);
+      }
+      console.log(response);
+      showMsg("Mensagem enviada com sucesso.");
+    })
+    .catch(function (error) {
+      alert(error)
+    })
+
+
+  
+}
+";}}s:6:"public";b:1;s:10:"created_at";s:20:"2018-12-11T16:15:52Z";s:10:"updated_at";s:20:"2018-12-12T16:04:49Z";s:11:"description";s:90:"wordpress upload to dir via post (direct upload or using wp media handle) - ajax via axios";s:8:"filesnum";i:2;}i:3;a:8:{s:3:"url";s:61:"https://api.github.com/gists/315b4d0ce21606e4b582553aba1bc3a4";s:8:"html_url";s:56:"https://gist.github.com/315b4d0ce21606e4b582553aba1bc3a4";s:5:"files";a:1:{s:26:"regex-cyrillic-2-latin.php";a:6:{s:8:"filename";s:26:"regex-cyrillic-2-latin.php";s:4:"type";s:23:"application/x-httpd-php";s:8:"language";s:3:"PHP";s:7:"raw_url";s:150:"https://gist.githubusercontent.com/giventofly/315b4d0ce21606e4b582553aba1bc3a4/raw/79caf6431c2723dc8419ca8ed1da43d15c50e809/regex-cyrillic-2-latin.php";s:4:"size";i:361;s:7:"content";s:361:"<?php
+
+//https://stackoverflow.com/a/6837426/1911609
+
+function strtolatin($string){
+    if (strpos($string = htmlentities($string, ENT_QUOTES, 'UTF-8'), '&') !== false){
+        $string = html_entity_decode(preg_replace('~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|tilde|uml);~i', '$1', $string), ENT_QUOTES, 'UTF-8');
+    }
+    return $string;
+}";}}s:6:"public";b:1;s:10:"created_at";s:20:"2018-12-10T23:06:44Z";s:10:"updated_at";s:20:"2018-12-12T00:51:20Z";s:11:"description";s:41:"regex convert russian (cyrillic) to latin";s:8:"filesnum";i:1;}i:4;a:8:{s:3:"url";s:61:"https://api.github.com/gists/d369f866d214f3ae1b02fdd5c924c4cc";s:8:"html_url";s:56:"https://gist.github.com/d369f866d214f3ae1b02fdd5c924c4cc";s:5:"files";a:1:{s:9:"regex.php";a:6:{s:8:"filename";s:9:"regex.php";s:4:"type";s:23:"application/x-httpd-php";s:8:"language";s:3:"PHP";s:7:"raw_url";s:133:"https://gist.githubusercontent.com/giventofly/d369f866d214f3ae1b02fdd5c924c4cc/raw/1863b9d3f736ee3adaf472a1c14f6c217881a403/regex.php";s:4:"size";i:106;s:7:"content";s:106:"<?php
+
+//the m** *f*** /u that was missing.
+$re = '/([\w ,\-\'\p{L}]+)\s+–\s+([\w\d\s,\-\' \/]+)/miu';
+
+";}}s:6:"public";b:1;s:10:"created_at";s:20:"2018-12-10T17:05:00Z";s:10:"updated_at";s:20:"2018-12-10T17:05:01Z";s:11:"description";s:55:"regex php to work with cyrillic alphabet (õ and so on)";s:8:"filesnum";i:1;}i:5;a:8:{s:3:"url";s:61:"https://api.github.com/gists/3e6d5a4a585157f585f4ba3ae838d79a";s:8:"html_url";s:56:"https://gist.github.com/3e6d5a4a585157f585f4ba3ae838d79a";s:5:"files";a:2:{s:21:"array_remove_keys.php";a:6:{s:8:"filename";s:21:"array_remove_keys.php";s:4:"type";s:23:"application/x-httpd-php";s:8:"language";s:3:"PHP";s:7:"raw_url";s:145:"https://gist.githubusercontent.com/giventofly/3e6d5a4a585157f585f4ba3ae838d79a/raw/8d073b44b7ceaa39cfc413f0227c3d89fbc19558/array_remove_keys.php";s:4:"size";i:766;s:7:"content";s:766:"<?php
+//https://www.reich-consulting.net/support/developement/php-developement/removing-keys-from-an-array-in-php/
+function array_remove_keys($array, $keys = array()) {
+ 
+	// If array is empty or not an array at all, don't bother
+	// doing anything else.
+	if(empty($array) || (! is_array($array))) {
+		return $array;
+	}
+ 
+	// If $keys is a comma-separated list, convert to an array.
+	if(is_string($keys)) {
+		$keys = explode(',', $keys);
+	}
+ 
+	// At this point if $keys is not an array, we can't do anything with it.
+	if(! is_array($keys)) {
+		return $array;
+	}
+ 
+    // array_diff_key() expected an associative array.
+    $assocKeys = array();
+    foreach($keys as $key) {
+        $assocKeys[$key] = true;
+    }
+ 
+    return array_diff_key($array, $assocKeys);
+}
+?>";}s:10:"readme.txt";a:6:{s:8:"filename";s:10:"readme.txt";s:4:"type";s:10:"text/plain";s:8:"language";s:4:"Text";s:7:"raw_url";s:134:"https://gist.githubusercontent.com/giventofly/3e6d5a4a585157f585f4ba3ae838d79a/raw/0353766e70a2d546bd2bc8e71cc68b186b11b41e/readme.txt";s:4:"size";i:134;s:7:"content";s:134:"from https://www.reich-consulting.net/support/developement/php-developement/removing-keys-from-an-array-in-php/
+(need 2 files to test)";}}s:6:"public";b:1;s:10:"created_at";s:20:"2018-12-05T10:40:40Z";s:10:"updated_at";s:20:"2018-12-05T10:54:11Z";s:11:"description";s:50:"php remove key from array (multi dimension or not)";s:8:"filesnum";i:2;}i:6;a:8:{s:3:"url";s:61:"https://api.github.com/gists/afbc99dbb9ee01208740e5968ad87214";s:8:"html_url";s:56:"https://gist.github.com/afbc99dbb9ee01208740e5968ad87214";s:5:"files";a:1:{s:13:"get_posts.php";a:6:{s:8:"filename";s:13:"get_posts.php";s:4:"type";s:23:"application/x-httpd-php";s:8:"language";s:3:"PHP";s:7:"raw_url";s:137:"https://gist.githubusercontent.com/giventofly/afbc99dbb9ee01208740e5968ad87214/raw/82f8280a05318fbeef31d1574bde72d29c0f52f5/get_posts.php";s:4:"size";i:732;s:7:"content";s:732:"	<?php
+  $exposicoes = get_posts(array(
+							'post_type' => 'exposicao',
+							'meta_query' => array(
+								array( //comparing all post_type of exposicao that has meta key left_artistas with value
+									'key' => 'left_artistas', // name of custom field
+									'value' => '"' . get_the_ID() . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
+									'compare' => 'LIKE'
+								)
+								),
+								'meta_key' => 'left_data_fim', //meta key
+            		'orderby' => 'meta_value_num', //value
+            		'order' => 'DESC',
+						));
+	$expos = "";
+	foreach ($exposicoes as $key => $value) {
+		$expos .= $value->post_title . "<br>";
+	}
+	echo "<pre>".print_r($exposicoes, true)."</pre>";
+  ?>";}}s:6:"public";b:1;s:10:"created_at";s:20:"2018-12-03T16:33:41Z";s:10:"updated_at";s:20:"2018-12-03T16:33:41Z";s:11:"description";s:69:"wordpress custom query posts (custom post type and custom meta field)";s:8:"filesnum";i:1;}}
