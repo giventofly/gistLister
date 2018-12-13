@@ -124,6 +124,9 @@ if($updatecache) {
   
 	//parse for each gist and create a new json with the contents
 	file_put_contents('cache.json', serialize($finaljson));
+	//redirect to normal
+	header('Location: ./');
+	exit();
 }
   $read = "[{}]";
 	if(!$updatecache) { $read = unserialize(file_get_contents('cache.json'));}
