@@ -14,15 +14,15 @@ It uses your github API key to search and store your gists information in a loca
 
 The load and manipulation is made by JavaScript after that.
 
-├── app.js (javascript to deal with the sort/filter/create the gists from json)
-├── app.min.js (minified)
-├── cache.json (cache json)
-├── full.php (full working with php)
-├── index.html (mockup)
-├── LICENSE
-├── README.md
-├── styles.css 
-└── styles.scss (sass stylesheet)
+    ├── app.js (javascript to deal with the sort/filter/create the gists from json)
+    ├── app.min.js (minified)
+    ├── cache.json (cache json)
+    ├── full.php (full working with php)
+    ├── index.html (mockup)
+    ├── LICENSE
+    ├── README.md
+    ├── styles.css 
+    └── styles.scss (sass stylesheet)
 
 ## Improvements (TODO someday)
 
